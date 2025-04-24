@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Console\View\Components\Alert;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -68,5 +68,11 @@ class LoginController extends Controller
 
         $user->last_login_at = now();
         $user->save();
+    }
+
+    protected function loggedOut(Request $request)
+    {
+        Alert::success('Logout Berhasil', 'Anda telah berhasil logout dari sistem');
+        return redirect('/login');
     }
 }

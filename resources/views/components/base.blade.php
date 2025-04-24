@@ -42,53 +42,29 @@
 
     {{ $slot }}
 
-    @if (request()->routeIs('login'))
-        <!-- Bootstrap core JavaScript-->
-        <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- JS Utama untuk semua halaman -->
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-        <!-- Custom scripts for all pages-->
-        <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
-    @else
-        <!-- Bootstrap core JavaScript-->
-        <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-        <!-- Core plugin JavaScript-->
-        <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-        <!-- Custom scripts for all pages-->
-        <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
-
-        @if (request()->routeIs('home'))
-            <!-- Page level plugins -->
+    <!-- JS khusus halaman tertentu -->
+    @switch(true)
+        @case(request()->routeIs('home'))
+            <!-- Chart.js (Dashboard) -->
             <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
-
-            <!-- Page level custom scripts -->
             <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
             <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
-        @elseif (request()->routeIs('kategori.index'))
-            <!-- Bootstrap core JavaScript-->
-            <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-            <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        @break
 
-            <!-- Core plugin JavaScript-->
-            <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-            <!-- Custom scripts for all pages-->
-            <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
-
-            <!-- Page level plugins -->
+        @case(request()->routeIs('kategori.index'))
+            <!-- DataTables (Kategori) -->
             <script src="{{ asset('assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-            <!-- Page level custom scripts -->
             <script src="{{ asset('assets/js/demo/datatables-demo.js') }}"></script>
-        @endif
-    @endif
+        @break
+    @endswitch
+
 
 </body>
 
