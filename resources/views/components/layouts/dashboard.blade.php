@@ -9,9 +9,9 @@
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
             <div id="content">
-                <!-- Topbar -->
-                <x-layouts.partials.navbar />
-                <!-- End of Topbar -->
+                <!-- Navbar -->
+                <x-layouts.partials.navbar :breadCrumbs="$breadcrumbs ?? []" />
+                <!-- End of Navbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -25,7 +25,8 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        <span>Copyright &copy; Sistem Manajemen Stok &mdash; SIMAST - APP
+                            {{ now()->format('Y') }}</span>
                     </div>
                 </div>
             </footer>

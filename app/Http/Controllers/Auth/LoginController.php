@@ -60,10 +60,10 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if ($user->role == 'Owner' || $user->role == 'Op-Gudang') {
-            return redirect()->intended($this->redirectTo);
+            return redirect()->intended($this->redirectTo)->with('success', 'Login Berhasil');
         } else {
             Auth::logout();
-            return redirect()->back()->with('error', 'Kamu tidak memiliki akses untuk login ke sistem ini');
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk login ke sistem ini');
         }
 
         $user->last_login_at = now();

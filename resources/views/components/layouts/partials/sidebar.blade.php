@@ -35,16 +35,18 @@
     </li>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
+    <li class="nav-item {{ request()->is('kategori*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->is('kategori*') ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
+            data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-list"></i>
             <span>Data Master</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse {{ request()->is('kategori*') ? 'show' : '' }}"
+            aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Data &rarr;</h6>
-                <a class="collapse-item" href="#">Kategori Barang</a>
+                <h6 class="collapse-header {{ request()->is('kategori*') ? 'text-primary' : '' }}">Data &rarr;</h6>
+                <a class="collapse-item {{ request()->is('kategori*') ? 'active' : '' }}"
+                    href="{{ route('kategori.index') }}">Kategori Barang</a>
                 <a class="collapse-item" href="#">Barang</a>
             </div>
         </div>

@@ -28,12 +28,17 @@
 
         <!-- Custom styles for this template-->
         <link href="{{ asset('assets/css/sb-admin-2.min.css') }}" rel="stylesheet" />
+
+        <!-- Custom styles for this page -->
+        <link href="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     @endif
 
     <title>SiMast App &mdash; {{ $title ?? __('Page Title') }}</title>
 </head>
 
 <body>
+
+    @include('sweetalert::alert')
 
     {{ $slot }}
 
@@ -58,12 +63,31 @@
         <!-- Custom scripts for all pages-->
         <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
 
-        <!-- Page level plugins -->
-        <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
+        @if (request()->routeIs('home'))
+            <!-- Page level plugins -->
+            <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
 
-        <!-- Page level custom scripts -->
-        <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
-        <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+            <!-- Page level custom scripts -->
+            <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
+            <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+        @elseif (request()->routeIs('kategori.index'))
+            <!-- Bootstrap core JavaScript-->
+            <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+            <!-- Core plugin JavaScript-->
+            <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+            <!-- Custom scripts for all pages-->
+            <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
+
+            <!-- Page level plugins -->
+            <script src="{{ asset('assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+            <script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+            <!-- Page level custom scripts -->
+            <script src="{{ asset('assets/js/demo/datatables-demo.js') }}"></script>
+        @endif
     @endif
 
 </body>
