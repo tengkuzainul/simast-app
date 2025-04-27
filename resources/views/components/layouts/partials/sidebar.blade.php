@@ -41,13 +41,17 @@
             <i class="fas fa-fw fa-list"></i>
             <span>Data Master</span>
         </a>
-        <div id="collapseTwo" class="collapse {{ request()->is('kategori*') ? 'show' : '' }}"
+        <div id="collapseTwo"
+            class="collapse {{ request()->is('kategori*') || request()->is('barang*') ? 'show' : '' }}"
             aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header {{ request()->is('kategori*') ? 'text-primary' : '' }}">Data &rarr;</h6>
+                <h6
+                    class="collapse-header {{ request()->is('kategori*') || request()->is('barang*') ? 'text-primary' : '' }}">
+                    Data &rarr;</h6>
                 <a class="collapse-item {{ request()->is('kategori*') ? 'active' : '' }}"
                     href="{{ route('kategori.index') }}">Kategori Barang</a>
-                <a class="collapse-item" href="#">Barang</a>
+                <a class="collapse-item  {{ request()->is('barang*') ? 'active' : '' }}"
+                    href="{{ route('barang.index') }}">Barang</a>
             </div>
         </div>
     </li>

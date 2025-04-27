@@ -15,8 +15,7 @@ class KategoriBarangController extends Controller
     {
         $breadcrumbs = [
             ['label' => 'Dashboard', 'url' => route('home')],
-            ['label' => 'Kategori Barang', 'url' => route('kategori.index')],
-            ['label' => 'Data']
+            ['label' => 'Data Kategori Barang']
         ];
 
         $kategoris = Kategori::all();

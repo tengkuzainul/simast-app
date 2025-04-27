@@ -19,4 +19,9 @@ class Kategori extends Model
     protected $casts = [
         'status' => 'boolean',
     ];
+
+    public function barang()
+    {
+        return $this->hasMany(Barang::class, 'kategori_id', 'id');
+    }
 }

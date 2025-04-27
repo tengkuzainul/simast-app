@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MasterData\BarangController;
 use App\Http\Controllers\MasterData\KategoriBarangController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -42,5 +43,16 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store', 'store')->name('kategori.store');
         Route::put('/update/{kategori}', 'update')->name('kategori.update');
         Route::delete('/destroy/{kategori}', 'destroy')->name('kategori.destroy');
+    });
+    /**
+     * Route Barang
+     */
+    Route::controller(BarangController::class)->prefix('barang')->group(function () {
+        Route::get('/data', 'index')->name('barang.index');
+        Route::get('/create', 'create')->name('barang.create');
+        Route::post('/store', 'store')->name('barang.store');
+        Route::get('/edit/{barang}', 'edit')->name('barang.edit');
+        Route::put('/update/{barang}', 'update')->name('barang.update');
+        Route::delete('/destroy/{barang}', 'destroy')->name('barang.destroy');
     });
 });
