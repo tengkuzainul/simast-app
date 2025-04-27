@@ -57,7 +57,7 @@
             <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
         @break
 
-        @case(request()->routeIs('kategori.index'))
+        @case(request()->is('kategori*') || request()->is('user*'))
             <!-- DataTables (Kategori) -->
             <script src="{{ asset('assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>

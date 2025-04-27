@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', ['Owner', 'Op-Gudang']);
-            $table->timestamp('last_login_at');
-            $table->boolean('is_active')->default(false);
+            $table->timestamp('last_login_at')->nullable();
 
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

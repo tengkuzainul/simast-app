@@ -21,7 +21,6 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'role' => 'Owner',
                 'last_login_at' => now(),
-                'is_active' => true,
             ],
             [
                 'name' => 'Operator Gudang',
@@ -30,7 +29,6 @@ class UserSeeder extends Seeder
                 'username' => 'operator2025',
                 'role' => 'Op-Gudang',
                 'last_login_at' => now(),
-                'is_active' => true,
             ]
         ];
 

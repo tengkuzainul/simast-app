@@ -57,17 +57,16 @@ class LoginController extends Controller
         return $field;
     }
 
-    protected function authenticated(Request $request, $user)
+    public function authenticated(Request $request, $user)
     {
         if ($user->role == 'Owner' || $user->role == 'Op-Gudang') {
+            $user->last_login_at = now();
+            $user->save();
             return redirect()->intended($this->redirectTo)->with('success', 'Login Berhasil');
         } else {
             Auth::logout();
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk login ke sistem ini');
         }
-
-        $user->last_login_at = now();
-        $user->save();
     }
 
     protected function loggedOut(Request $request)

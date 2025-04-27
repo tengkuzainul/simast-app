@@ -28,8 +28,8 @@
     <!-- Heading -->
     <div class="sidebar-heading">Menu</div>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item {{ request()->is('user*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('user.index') }}">
             <i class="fas fa-fw fa-users"></i>
             <span>Data Pengguna</span></a>
     </li>

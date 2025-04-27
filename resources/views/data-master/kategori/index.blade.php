@@ -24,7 +24,7 @@
                             aria-describedby="namaKategori" placeholder="Masukkan Nama Kategori">
                         @error('namaKategori')
                             <div class="valid-feedback">
-                                Looks good!
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -40,7 +40,7 @@
                         </select>
                         @error('statusKategori')
                             <div class="valid-feedback">
-                                Looks good!
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -52,7 +52,7 @@
                             id="deskripsiKategori" rows="3" placeholder="Masukkan Deksripsi Kategori">{{ old('deskripsiKategori') }}</textarea>
                         @error('deskripsiKategori')
                             <div class="valid-feedback">
-                                Looks good!
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -69,7 +69,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ $title }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -137,7 +137,7 @@
                                                             placeholder="Masukkan Nama Kategori">
                                                         @error('namaKategori')
                                                             <div class="valid-feedback">
-                                                                Looks good!
+                                                                {{ $message }}}}
                                                             </div>
                                                         @enderror
                                                     </div>
@@ -159,7 +159,7 @@
                                                         </select>
                                                         @error('statusKategori')
                                                             <div class="valid-feedback">
-                                                                Looks good!
+                                                                {{ $message }}}}
                                                             </div>
                                                         @enderror
                                                     </div>
@@ -172,7 +172,7 @@
                                                             id="deskripsiKategori" rows="3" placeholder="Masukkan Deksripsi Kategori">{{ old('deskripsiKategori', $kategori->deskripsi) }}</textarea>
                                                         @error('deskripsiKategori')
                                                             <div class="valid-feedback">
-                                                                Looks good!
+                                                                {{ $message }}}}
                                                             </div>
                                                         @enderror
                                                     </div>
