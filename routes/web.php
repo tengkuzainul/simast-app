@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterData\BarangController;
 use App\Http\Controllers\MasterData\KategoriBarangController;
+use App\Http\Controllers\MasterData\PemasokController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -54,5 +55,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/edit/{barang}', 'edit')->name('barang.edit');
         Route::put('/update/{barang}', 'update')->name('barang.update');
         Route::delete('/destroy/{barang}', 'destroy')->name('barang.destroy');
+    });
+    /**
+     * Route Pemasok
+     */
+    Route::controller(PemasokController::class)->prefix('pemasok')->group(function () {
+        Route::get('/data', 'index')->name('pemasok.index');
+        Route::post('/store', 'store')->name('pemasok.store');
+        Route::put('/update/{pemasok}', 'update')->name('pemasok.update');
+        Route::delete('/destroy/{pemasok}', 'destroy')->name('pemasok.destroy');
     });
 });

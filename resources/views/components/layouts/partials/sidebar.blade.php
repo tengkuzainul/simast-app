@@ -42,17 +42,18 @@
             <span>Data Master</span>
         </a>
         <div id="collapseTwo"
-            class="collapse {{ request()->is('kategori*') || request()->is('barang*') ? 'show' : '' }}"
+            class="collapse {{ request()->is('kategori*') || request()->is('barang*') || request()->is('pemasok*') ? 'show' : '' }}"
             aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6
-                    class="collapse-header {{ request()->is('kategori*') || request()->is('barang*') ? 'text-primary' : '' }}">
+                    class="collapse-header {{ request()->is('kategori*') || request()->is('barang*') || request()->is('pemasok*') ? 'text-primary' : '' }}">
                     Data &rarr;</h6>
                 <a class="collapse-item {{ request()->is('kategori*') ? 'active' : '' }}"
                     href="{{ route('kategori.index') }}">Kategori Barang</a>
                 <a class="collapse-item  {{ request()->is('barang*') ? 'active' : '' }}"
                     href="{{ route('barang.index') }}">Barang</a>
-                <a class="collapse-item  {{ request()->is('') ? 'active' : '' }}" href="#">Pemasok</a>
+                <a class="collapse-item  {{ request()->is('pemasok*') ? 'active' : '' }}"
+                    href="{{ route('pemasok.index') }}">Pemasok</a>
             </div>
         </div>
     </li>
