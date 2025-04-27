@@ -26,6 +26,7 @@ class BarangController extends Controller
         $text = "Anda yakin ingin menghapus?";
         confirmDelete($title, $text);
 
+
         return view('data-master.barang.index', [
             'breadcrumbs' => $breadcrumbs,
             'title' => 'Barang'
@@ -71,7 +72,7 @@ class BarangController extends Controller
     {
         $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'satuan' => 'required|string|max:50',
+            'min_stok' => 'required|numeric|max:50',
             'stok_final' => 'required|integer|min:0',
             'harga_beli' => 'required|numeric|min:0',
             'harga_jual' => 'required|numeric|min:0',
@@ -88,7 +89,7 @@ class BarangController extends Controller
         Barang::create([
             'kode_barang' => $this->generateKodeBarang(),
             'nama_barang' => $request->nama_barang,
-            'satuan' => $request->satuan,
+            'min_stok' => $request->min_stok,
             'stok_final' => $request->stok_final,
             'harga_beli' => $request->harga_beli,
             'harga_jual' => $request->harga_jual,
@@ -127,7 +128,7 @@ class BarangController extends Controller
     {
         $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'satuan' => 'required|string|max:50',
+            'min_stok' => 'required|numeric|max:50',
             'stok_final' => 'required|integer|min:0',
             'harga_beli' => 'required|numeric|min:0',
             'harga_jual' => 'required|numeric|min:0',
@@ -146,7 +147,7 @@ class BarangController extends Controller
 
         $barang->update([
             'nama_barang' => $request->nama_barang,
-            'satuan' => $request->satuan,
+            'min_stok' => $request->min_stok,
             'stok_final' => $request->stok_final,
             'harga_beli' => $request->harga_beli,
             'harga_jual' => $request->harga_jual,

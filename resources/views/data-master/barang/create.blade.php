@@ -57,12 +57,12 @@
                     </div>
 
                     <div class="col-6 mb-3">
-                        <label for="satuan" class="form-label font-weight-bold">Satuan <span
+                        <label for="min_stok" class="form-label font-weight-bold">Minimal Stok <span
                                 class="text-danger">*</span></label>
-                        <input type="text" name="satuan" value="{{ old('satuan') }}"
-                            class="form-control @error('satuan') is-invalid @enderror" id="satuan"
-                            placeholder="Masukkan Satuan Barang">
-                        @error('satuan')
+                        <input type="number" name="min_stok" value="{{ old('min_stok') }}"
+                            class="form-control @error('min_stok') is-invalid @enderror" id="min_stok"
+                            placeholder="Masukkan Minimal Stok Barang">
+                        @error('min_stok')
                             <div class="valid-feedback">
                                 {{ $message }}
                             </div>

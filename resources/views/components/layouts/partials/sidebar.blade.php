@@ -52,6 +52,7 @@
                     href="{{ route('kategori.index') }}">Kategori Barang</a>
                 <a class="collapse-item  {{ request()->is('barang*') ? 'active' : '' }}"
                     href="{{ route('barang.index') }}">Barang</a>
+                <a class="collapse-item  {{ request()->is('') ? 'active' : '' }}" href="#">Pemasok</a>
             </div>
         </div>
     </li>

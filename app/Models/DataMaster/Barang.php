@@ -15,7 +15,7 @@ class Barang extends Model
         'foto_barang',
         'nama_barang',
         'kategori_id',
-        'satuan',
+        'min_stok',
         'stok_final',
         'harga_beli',
         'harga_jual',

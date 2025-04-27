@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('kode_barang', 50)->unique();
             $table->string('foto_barang')->nullable();
             $table->string('nama_barang', 255);
-            $table->string('satuan');
+            $table->integer('min_stok');
             $table->integer('stok_final')->default(0);
             $table->bigInteger('harga_beli');
             $table->bigInteger('harga_jual');
