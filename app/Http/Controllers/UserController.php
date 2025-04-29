@@ -20,7 +20,7 @@ class UserController extends Controller
             ['label' => 'Data Pengguna']
         ];
 
-        $users = Cache::remember('cached_users', now()->addMinutes(30), function () {
+        $users = Cache::remember('cached_users', now()->addSecond(60), function () {
             return User::all();
         });
 
@@ -136,6 +136,9 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+
+        Cache::forget('cached_users');
+        Cache::forget("user_edit_{$user->id}");
 
         return redirect()->route('user.index')->with('success', 'Pengguna berhasil dihapus.');
     }

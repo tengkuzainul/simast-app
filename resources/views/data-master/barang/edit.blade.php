@@ -150,8 +150,11 @@
                     <button type="reset" class="btn btn-warning">
                         <i class="fas fa-redo fa-sm text-white-100"></i> Reset Form
                     </button>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-check fa-sm text-white-100"></i> Simpan Data
+                    <button type="submit" class="btn btn-success loading-indicator">
+                        <i class="fas fa-check fa-sm text-white-100 icon-default"></i>
+                        <span class="spinner-border spinner-border-sm spinner-loading" role="status"
+                            aria-hidden="true" style="display: none;"></span>
+                        <span class="btn-text"> Simpan Data</span>
                     </button>
                 </div>
             </form>

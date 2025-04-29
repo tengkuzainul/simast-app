@@ -70,8 +70,11 @@
                 </div>
 
                 <div class="d-flex justify-content-end align-items-center mt-3">
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-check fa-sm text-white-100"></i> Simpan Data
+                    <button type="submit" class="btn btn-success loading-indicator">
+                        <i class="fas fa-check fa-sm text-white-100 icon-default"></i>
+                        <span class="spinner-border spinner-border-sm spinner-loading" role="status" aria-hidden="true"
+                            style="display: none;"></span>
+                        <span class="btn-text"> Simpan Data</span>
                     </button>
                 </div>
             </form>
@@ -207,8 +210,12 @@
                                                     data-dismiss="modal">
                                                     Batal
                                                 </button>
-                                                <button type="submit" class="btn btn-success">
-                                                    <i class="fas fa-check fa-sm text-white-100"></i> Simpan Data
+                                                <button type="submit" class="btn btn-success loading-indicator">
+                                                    <i class="fas fa-check fa-sm text-white-100 icon-default"></i>
+                                                    <span class="spinner-border spinner-border-sm spinner-loading"
+                                                        role="status" aria-hidden="true"
+                                                        style="display: none;"></span>
+                                                    <span class="btn-text"> Simpan Data</span>
                                                 </button>
                                             </div>
                                         </form>

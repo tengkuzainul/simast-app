@@ -65,6 +65,25 @@
         @break
     @endswitch
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.loading-indicator');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const icon = button.querySelector('.icon-default');
+                    const spinner = button.querySelector('.spinner-loading');
+                    const btnText = button.querySelector('.btn-text');
+
+                    if (icon) icon.style.display = 'none';
+                    if (spinner) spinner.style.display = 'inline-block';
+                    if (btnText) btnText.textContent = ' Menyimpan Data...';
+
+                    button.style.cursor = 'not-allowed';
+                });
+            });
+        });
+    </script>
 
 </body>
 
