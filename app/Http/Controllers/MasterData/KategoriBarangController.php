@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MasterData;
 use App\Http\Controllers\Controller;
 use App\Models\DataMaster\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class KategoriBarangController extends Controller
 {
@@ -18,7 +19,9 @@ class KategoriBarangController extends Controller
             ['label' => 'Data Kategori Barang']
         ];
 
-        $kategoris = Kategori::all();
+        $kategoris = Cache::remember('cached_kategoris', now()->addMinutes(30), function () {
+            return Kategori::all();
+        });
 
         $title = "Hapus Data";
         $text = "Anda yakin ingin menghapus?";
@@ -26,8 +29,9 @@ class KategoriBarangController extends Controller
 
         return view('data-master.kategori.index', [
             'breadcrumbs' => $breadcrumbs,
-            'title' => 'Kategori Barang'
-        ], compact('kategoris'));
+            'title' => 'Kategori Barang',
+            'kategoris' => $kategoris,
+        ]);
     }
 
     /**
@@ -37,7 +41,7 @@ class KategoriBarangController extends Controller
     {
         $request->validate([
             'namaKategori' => 'required|string|max:50',
-            'statusKategori' => 'required|string|boolean',
+            'statusKategori' => 'required|boolean',
             'deskripsiKategori' => 'nullable|string|max:255'
         ]);
 
@@ -46,6 +50,9 @@ class KategoriBarangController extends Controller
         $kategori->deskripsi = $request->deskripsiKategori;
         $kategori->status = $request->statusKategori;
         $kategori->save();
+
+        // ✅ Invalidate cache
+        Cache::forget('cached_kategoris');
 
         return redirect()->back()->with('success', 'Kategori berhasil ditambahkan');
     }
@@ -66,6 +73,9 @@ class KategoriBarangController extends Controller
         $kategori->status = $request->statusKategori;
         $kategori->save();
 
+        // ✅ Invalidate cache
+        Cache::forget('cached_kategoris');
+
         return redirect()->back()->with('success', 'Kategori berhasil diperbarui');
     }
 
@@ -75,6 +85,9 @@ class KategoriBarangController extends Controller
     public function destroy(Kategori $kategori)
     {
         $kategori->delete();
+
+        // ✅ Invalidate cache
+        Cache::forget('cached_kategoris');
 
         return redirect()->back()->with('success', 'Kategori berhasil dihapus');
     }

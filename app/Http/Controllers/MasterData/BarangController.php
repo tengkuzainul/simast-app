@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\DataMaster\Barang;
 use App\Models\DataMaster\Kategori;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class BarangController extends Controller
@@ -20,17 +21,19 @@ class BarangController extends Controller
             ['label' => 'Data Barang']
         ];
 
-        $barangs = Barang::with('kategori')->get();
+        $barangs = Cache::remember('cached_barangs', now()->addMinutes(30), function () {
+            return Barang::with('kategori')->get();
+        });
 
         $title = "Hapus Data";
         $text = "Anda yakin ingin menghapus?";
         confirmDelete($title, $text);
 
-
         return view('data-master.barang.index', [
             'breadcrumbs' => $breadcrumbs,
-            'title' => 'Barang'
-        ], compact('barangs'));
+            'title' => 'Barang',
+            'barangs' => $barangs,
+        ]);
     }
 
     /**
@@ -47,8 +50,10 @@ class BarangController extends Controller
                 ['label' => 'Data Barang', 'url' => route('barang.index')],
                 ['label' => 'Tambah']
             ],
-            'title' => 'Tambah Barang'
-        ], compact('kategoris', 'kodeBarang'));
+            'title' => 'Tambah Barang',
+            'kategoris' => $kategoris,
+            'kodeBarang' => $kodeBarang,
+        ]);
     }
 
     protected function generateKodeBarang()
@@ -98,9 +103,11 @@ class BarangController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
+        // ✅ Hapus cache agar data baru muncul
+        Cache::forget('cached_barangs');
+
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan.');
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -156,6 +163,9 @@ class BarangController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
+        // ✅ Hapus cache karena data berubah
+        Cache::forget('cached_barangs');
+
         return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
     }
 
@@ -169,6 +179,9 @@ class BarangController extends Controller
         }
 
         $barang->delete();
+
+        // ✅ Hapus cache karena data dihapus
+        Cache::forget('cached_barangs');
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus.');
     }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -18,10 +20,12 @@ class UserController extends Controller
             ['label' => 'Data Pengguna']
         ];
 
-        $users = User::all();
+        $users = Cache::remember('cached_users', now()->addMinutes(30), function () {
+            return User::all();
+        });
 
         $users->transform(function ($user) {
-            $user->last_login_at = $user->last_login_at ? \Carbon\Carbon::parse($user->last_login_at)->diffForHumans() : null;
+            $user->last_login_at = $user->last_login_at ? Carbon::parse($user->last_login_at)->diffForHumans() : null;
             return $user;
         });
 
@@ -73,6 +77,8 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        Cache::forget('cached_users');
+
         return redirect()->route('user.index')->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
@@ -81,6 +87,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $cachedUser = Cache::remember("user_edit_{$user->id}", now()->addMinutes(30), function () use ($user) {
+            return User::find($user->id);
+        });
+
         return view('user.edit', [
             'breadcrumbs' => [
                 ['label' => 'Dashboard', 'url' => route('home')],
@@ -88,7 +98,7 @@ class UserController extends Controller
                 ['label' => 'Edit Pengguna']
             ],
             'title' => 'Edit Pengguna',
-            'user' => $user,
+            'user' => $cachedUser,
         ]);
     }
 
@@ -113,6 +123,9 @@ class UserController extends Controller
             'role' => $request->levelPengguna,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
+
+        Cache::forget('cached_users');
+        Cache::forget("user_edit_{$user->id}");
 
         return redirect()->route('user.index')->with('success', 'Pengguna berhasil diperbarui.');
     }

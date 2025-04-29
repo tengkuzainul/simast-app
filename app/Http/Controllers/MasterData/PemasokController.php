@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MasterData;
 use App\Http\Controllers\Controller;
 use App\Models\DataMaster\Pemasok;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PemasokController extends Controller
 {
@@ -18,7 +19,10 @@ class PemasokController extends Controller
             ['label' => 'Data Pemasok']
         ];
 
-        $pemasok = Pemasok::all();
+        $pemasok = Cache::remember('cached_pemasoks', now()->addMinutes(30), function () {
+            return Pemasok::all();
+        });
+
         $kodePemasok = $this->generateKodePemasok();
 
         $title = "Hapus Data";
@@ -27,8 +31,10 @@ class PemasokController extends Controller
 
         return view('data-master.pemasok.index', [
             'breadcrumbs' => $breadcrumbs,
-            'title' => 'Pemasok'
-        ], compact('pemasok', 'kodePemasok'));
+            'title' => 'Pemasok',
+            'pemasok' => $pemasok,
+            'kodePemasok' => $kodePemasok
+        ]);
     }
 
     protected function generateKodePemasok()
@@ -48,7 +54,7 @@ class PemasokController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'namaPemasok' => 'required|string|',
+            'namaPemasok' => 'required|string',
             'alamat' => 'nullable|string|max:255',
             'telepon' => 'nullable|string|max:255',
         ]);
@@ -60,7 +66,10 @@ class PemasokController extends Controller
         $pemasok->telepon = $request->telepon;
         $pemasok->save();
 
-        return redirect()->back()->with('success', 'Kategori berhasil ditambahkan');
+        // ✅ Hapus cache agar data baru muncul
+        Cache::forget('cached_pemasoks');
+
+        return redirect()->back()->with('success', 'Pemasok berhasil ditambahkan');
     }
 
     /**
@@ -74,13 +83,15 @@ class PemasokController extends Controller
             'telepon' => 'nullable|string|max:255',
         ]);
 
-        $pemasok->kode_pemasok = $pemasok->kode_pemasok;
         $pemasok->nama_pemasok = $request->namaPemasok;
         $pemasok->alamat = $request->alamat;
         $pemasok->telepon = $request->telepon;
         $pemasok->save();
 
-        return redirect()->back()->with('success', 'Kategori berhasil diperbarui');
+        // ✅ Hapus cache karena data berubah
+        Cache::forget('cached_pemasoks');
+
+        return redirect()->back()->with('success', 'Pemasok berhasil diperbarui');
     }
 
     /**
@@ -90,6 +101,9 @@ class PemasokController extends Controller
     {
         $pemasok->delete();
 
-        return redirect()->back()->with('success', 'Kategori berhasil dihapus');
+        // ✅ Hapus cache karena data dihapus
+        Cache::forget('cached_pemasoks');
+
+        return redirect()->back()->with('success', 'Pemasok berhasil dihapus');
     }
 }
