@@ -16,4 +16,9 @@ class Pemasok extends Model
         'alamat',
         'telepon',
     ];
+
+    public function stokTransaksi()
+    {
+        return $this->hasMany(StokTransaksi::class, 'pemasok_id', 'id');
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ManjamenStok\TransaksiStokController;
 use App\Http\Controllers\MasterData\BarangController;
 use App\Http\Controllers\MasterData\KategoriBarangController;
 use App\Http\Controllers\MasterData\PemasokController;
@@ -64,5 +65,16 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store', 'store')->name('pemasok.store');
         Route::put('/update/{pemasok}', 'update')->name('pemasok.update');
         Route::delete('/destroy/{pemasok}', 'destroy')->name('pemasok.destroy');
+    });
+    /**
+     * Route Transaksi Stok
+     */
+    Route::controller(TransaksiStokController::class)->prefix('manajemen-stok')->group(function () {
+        Route::get('/data', 'index')->name('stok.index');
+        Route::get('/form', 'formTransaksiStok')->name('stok.form');
+        Route::post('/submit-form', 'transactionCreate')->name('stok.submit');
+        Route::get('/edit/{transaksi}', 'edit')->name('stok.edit');
+        Route::put('/update/{transaksi}', 'update')->name('stok.update');
+        Route::delete('/destroy/{transaksi}', 'destroy')->name('stok.destroy');
     });
 });

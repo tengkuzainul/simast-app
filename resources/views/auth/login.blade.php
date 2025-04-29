@@ -32,8 +32,11 @@
                 </label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-user btn-block">
-            Masuk Ke Akun
+        <button type="submit" class="btn btn-primary btn-user btn-block loading-indicator">
+            <i class="fas fa-sign-in-alt fa-sm text-white-100 icon-default"></i>
+            <span class="spinner-border spinner-border-sm spinner-loading" role="status" aria-hidden="true"
+                style="display: none;"></span>
+            <span class="btn-text"> Masuk ke akun</span>
         </button>
         <hr>
     </form>

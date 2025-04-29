@@ -57,7 +57,11 @@
             <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
         @break
 
-        @case(request()->is('kategori*') || request()->is('user*') || request()->is('barang*') || request()->is('pemasok*'))
+        @case(request()->is('kategori*') ||
+                request()->is('user*') ||
+                request()->is('barang*') ||
+                request()->is('pemasok*') ||
+                request()->is('manajemen-stok*'))
             <!-- DataTables (Kategori) -->
             <script src="{{ asset('assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -77,7 +81,7 @@
 
                     if (icon) icon.style.display = 'none';
                     if (spinner) spinner.style.display = 'inline-block';
-                    if (btnText) btnText.textContent = ' Menyimpan Data...';
+                    if (btnText) btnText.textContent = ' Tunggu Proses...';
 
                     button.style.cursor = 'not-allowed';
                 });

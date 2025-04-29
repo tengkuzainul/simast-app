@@ -59,17 +59,22 @@
     </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
+    <li class="nav-item {{ request()->is('manajemen-stok*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->is('manajemen-stok*') ? '' : 'collapsed' }}" href="#"
+            data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true"
+            aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-boxes"></i>
             <span>Manajemen Stok</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="collapseUtilities" class="collapse {{ request()->is('manajemen-stok*') ? 'show' : '' }}"
+            aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Data &rarr;</h6>
-                <a class="collapse-item" href="#">Stok Barang</a>
-                <a class="collapse-item" href="utilities-border.html">Buat Pelaporan Stok</a>
+                <h6 class="collapse-header {{ request()->is('manajemen-stok*') ? 'text-primary' : '' }}">
+                    Data &rarr;</h6>
+                <a class="collapse-item {{ request()->routeIs('stok.form') ? 'active' : '' }}"
+                    href="{{ route('stok.form') }}">Transaksi Stok</a>
+                <a class="collapse-item {{ request()->routeIs('stok.index') ? 'active' : '' }}"
+                    href="{{ route('stok.index') }}">Data Transaksi</a>
             </div>
         </div>
     </li>

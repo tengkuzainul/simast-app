@@ -103,7 +103,6 @@ class BarangController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
-        // ✅ Hapus cache agar data baru muncul
         Cache::forget('cached_barangs');
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan.');
@@ -116,6 +115,10 @@ class BarangController extends Controller
     {
         $kategoris = Kategori::where('status', 1)->get();
 
+        $cachedBarang = Cache::remember("barang_edit_{$barang->id}", now()->addMinutes(30), function () use ($barang) {
+            return Barang::find($barang->id);
+        });
+
         return view('data-master.barang.edit', [
             'breadcrumbs' => [
                 ['label' => 'Dashboard', 'url' => route('home')],
@@ -123,7 +126,7 @@ class BarangController extends Controller
                 ['label' => 'Edit']
             ],
             'title' => 'Edit Barang',
-            'barang' => $barang,
+            'barang' => $cachedBarang,
             'kategoris' => $kategoris,
         ]);
     }
@@ -165,6 +168,7 @@ class BarangController extends Controller
 
         // ✅ Hapus cache karena data berubah
         Cache::forget('cached_barangs');
+        Cache::forget("barang_edit_{$barang->id}");
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
     }
@@ -182,6 +186,7 @@ class BarangController extends Controller
 
         // ✅ Hapus cache karena data dihapus
         Cache::forget('cached_barangs');
+        Cache::forget("barang_edit_{$barang->id}");
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus.');
     }
