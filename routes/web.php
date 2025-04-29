@@ -75,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/submit-form', 'transactionCreate')->name('stok.submit');
         Route::get('/edit/{transaksi}', 'edit')->name('stok.edit');
         Route::put('/update/{transaksi}', 'update')->name('stok.update');
+        Route::put('/confirmed/{transaksi}', 'konfirmasiStatus')->name('stok.status');
         Route::delete('/destroy/{transaksi}', 'destroy')->name('stok.destroy');
     });
 });

@@ -117,15 +117,40 @@
                                         class="badge text-white p-2 bg-primary">{{ \Carbon\Carbon::parse($transaksi->created_at)->translatedFormat('l, d F Y') }}</span>
                                 </td>
                                 <td>
-                                    <div class="d-flex justify-content-center align-items-center" style="gap: 5px;">
-                                        <a href="{{ route('stok.edit', $transaksi->id) }}"
-                                            class="btn btn-secondary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="{{ route('stok.destroy', $transaksi->id) }}"
-                                            class="btn btn-danger btn-sm" data-confirm-delete="true">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+                                    <div class="d-flex flex-column" style="gap: 10px">
+                                        <div class="d-flex justify-content-center align-items-center" style="gap: 5px;">
+                                            <a href="{{ route('stok.edit', $transaksi->id) }}"
+                                                class="btn btn-secondary btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ route('stok.destroy', $transaksi->id) }}"
+                                                class="btn btn-danger btn-sm" data-confirm-delete="true">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                        <form action="{{ route('stok.status', $transaksi->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status_transaksi" value=""
+                                                id="statusInput-{{ $transaksi->id }}">
+
+                                            <div class="d-flex justify-content-center align-items-center"
+                                                style="gap: 5px;">
+                                                <button type="submit"
+                                                    onclick="document.getElementById('statusInput-{{ $transaksi->id }}').value='Disetujui'"
+                                                    class="text-success"
+                                                    style="background: none; border: none; display: inline-flex; align-items: center; gap: 5px">
+                                                    <i class="fas fa-check-circle"></i> Setujui
+                                                </button>
+
+                                                <button type="submit"
+                                                    onclick="document.getElementById('statusInput-{{ $transaksi->id }}').value='Menunggu'"
+                                                    class="text-danger"
+                                                    style="background: none; border: none; display: inline-flex; align-items: center; gap: 5px">
+                                                    <i class="fas fa-times-circle"></i> Kembalikan
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

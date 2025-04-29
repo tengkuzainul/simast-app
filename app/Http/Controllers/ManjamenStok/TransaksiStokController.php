@@ -188,6 +188,16 @@ class TransaksiStokController extends Controller
         return redirect()->route('stok.index')->with('success', 'Transaksi berhasil diubah.');
     }
 
+    public function konfirmasiStatus(Request $request, StokTransaksi $transaksi)
+    {
+        $request->validate([
+            'status_transaksi' => 'required|in:Disetujui,Menunggu',
+        ]);
+
+        $transaksi->update(['status_transaksi' => $request->status_transaksi]);
+
+        return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui.');
+    }
 
     public function destroy(StokTransaksi $transaksi)
     {
