@@ -88,17 +88,19 @@
     <!-- Divider -->
     <hr class="sidebar-divider" />
 
-    <!-- Heading -->
-    <div class="sidebar-heading">Laporan</div>
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-file"></i>
-            <span>Data Laporan</span></a>
-    </li>
+    @assignRole('Owner')
+        <!-- Heading -->
+        <div class="sidebar-heading">Laporan</div>
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('laporan.form') }}">
+                <i class="fas fa-fw fa-file"></i>
+                <span>Data Laporan</span></a>
+        </li>
+        <hr class="sidebar-divider d-none d-md-block" />
+    @endassignRole
 
     <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block" />
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

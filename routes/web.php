@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DataLaporan\LaporanController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManjamenStok\TransaksiStokController;
 use App\Http\Controllers\MasterData\BarangController;
@@ -92,6 +93,13 @@ Route::middleware(['auth'])->group(function () {
          */
         Route::controller(PemasokController::class)->prefix('pemasok')->group(function () {
             Route::delete('/destroy/{pemasok}', 'destroy')->name('pemasok.destroy');
+        });
+        /**
+         * Route Data Laporan
+         */
+        Route::controller(LaporanController::class)->prefix('laporan')->group(function () {
+            Route::get('/form', 'getFormLaporan')->name('laporan.form');
+            Route::post('/rekap', 'rekapLaporan')->name('laporan.rekap');
         });
     });
 

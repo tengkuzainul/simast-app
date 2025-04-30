@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataMaster\Barang;
+use App\Models\DataMaster\Kategori;
+use App\Models\DataMaster\Pemasok;
+use App\Models\DataMaster\StokTransaksi;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -28,9 +33,24 @@ class HomeController extends Controller
             ['label' => 'Home']
         ];
 
+        $countPengguna = User::count();
+        $countPemasok = Pemasok::count();
+        $countKatgeoriBarang = Kategori::count();
+        $countBarang = Barang::count();
+        $countTransaksiMasuk = StokTransaksi::where('tipe_transaksi', 'masuk')->count();
+        $countTransaksiKeluar = StokTransaksi::where('tipe_transaksi', 'keluar')->count();
+
+
         return view('home', [
             'breadcrumbs' => $breadcrumbs,
             'title' => 'Dashboard'
-        ]);
+        ], compact(
+            'countPengguna',
+            'countPemasok',
+            'countKatgeoriBarang',
+            'countBarang',
+            'countTransaksiMasuk',
+            'countTransaksiKeluar'
+        ));
     }
 }

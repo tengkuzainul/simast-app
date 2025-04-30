@@ -51,10 +51,10 @@
     <!-- JS khusus halaman tertentu -->
     @switch(true)
         @case(request()->routeIs('home'))
-            <!-- Chart.js (Dashboard) -->
+            {{-- <!-- Chart.js (Dashboard) -->
             <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
             <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
-            <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+            <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script> --}}
         @break
 
         @case(request()->is('kategori*') ||
