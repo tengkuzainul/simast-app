@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_transaksi', 50)->unique();
             $table->foreignId('barang_id')->constrained('tb_barang')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('pemasok_id')->constrained('tb_pemasok')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('pemasok_id')->nullable()->constrained('tb_pemasok')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->enum('tipe_transaksi', ['masuk', 'keluar']);
             $table->integer('jumlah');

@@ -101,7 +101,7 @@ class TransaksiStokController extends Controller
         $request->validate([
             'barang' => 'required|exists:tb_barang,id',
             'jenisTransaksi' => 'required|string|in:masuk,keluar',
-            'pemasok' => 'required|exists:tb_pemasok,id',
+            'pemasok' => 'nullable|exists:tb_pemasok,id',
             'jumlahBarang' => 'required|numeric|min:1',
         ]);
 
@@ -166,7 +166,7 @@ class TransaksiStokController extends Controller
         $request->validate([
             'barang' => 'required|exists:tb_barang,id',
             'jenisTransaksi' => 'required|string|in:masuk,keluar',
-            'pemasok' => 'required|exists:tb_pemasok,id',
+            'pemasok' => 'nullable|exists:tb_pemasok,id',
             'jumlahBarang' => 'required|numeric|min:1',
         ]);
 

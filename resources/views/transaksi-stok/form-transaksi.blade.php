@@ -70,7 +70,11 @@
                     </div>
 
                     <div class="col-6 mb-3">
-                        <label for="pemasok" class="form-label font-weight-bold">Pilih Pemasok</label>
+                        <label for="pemasok" class="form-label font-weight-bold">Pilih Pemasok <span
+                                class="border border-danger px-2 py-1 ml-2 text-danger rounded">Abaikan jika
+                                transaksi
+                                barang
+                                keluar!</span></label>
                         <select name="pemasok" class="form-control @error('pemasok') is-invalid @enderror"
                             id="pemasok" aria-label="Default select example">
                             <option selected disabled>Pilih Pemasok</option>
