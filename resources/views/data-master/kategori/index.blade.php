@@ -103,10 +103,13 @@
                                             data-target="#editModal-{{ $kategori->id }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('kategori.destroy', $kategori->id) }}"
-                                            class="btn btn-danger btn-sm" data-confirm-delete="true">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+
+                                        @assignRole('Owner')
+                                            <a href="{{ route('kategori.destroy', $kategori->id) }}"
+                                                class="btn btn-danger btn-sm" data-confirm-delete="true">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        @endassignRole
                                     </div>
                                 </td>
                             </tr>

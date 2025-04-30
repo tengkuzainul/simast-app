@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(StokTransaksi::class, 'user_id', 'id');
     }
+
+    public function getRoleAttribute()
+    {
+        return $this->attributes['role'];
+    }
 }

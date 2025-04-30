@@ -92,11 +92,14 @@
                                             class="btn btn-secondary btn-sm" aria-label="{{ __('Edit Barang') }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('barang.destroy', $barang->id) }}"
-                                            class="btn btn-danger btn-sm" data-confirm-delete="true"
-                                            aria-label="{{ __('Hapus Barang') }}">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+
+                                        @assignRole('Owner')
+                                            <a href="{{ route('barang.destroy', $barang->id) }}"
+                                                class="btn btn-danger btn-sm" data-confirm-delete="true"
+                                                aria-label="{{ __('Hapus Barang') }}">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        @endassignRole
                                     </div>
                                 </td>
                             </tr>

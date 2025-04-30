@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+            'assignRole' => \App\Http\Middleware\AssignRoleMiddleware::class,
         ]);
         $middleware->web(append: [
             \RealRashid\SweetAlert\ToSweetAlert::class,
@@ -21,3 +22,5 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+
+$app->configure('dompdf');

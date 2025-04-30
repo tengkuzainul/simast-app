@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DataMaster\Barang;
 use App\Models\DataMaster\Pemasok;
 use App\Models\DataMaster\StokTransaksi;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -120,6 +121,13 @@ class TransaksiStokController extends Controller
         $barang->stok_final = $currentStock + $incrementStock;
         $barang->save();
 
+        Notifikasi::create([
+            'title' => 'Transaksi ' . ucfirst($request->jenisTransaksi) . ' Baru',
+            'message' => 'Transaksi ' . $request->jenisTransaksi . ' untuk barang "' . $barang->nama_barang . '" telah dibuat.',
+            'status' => 'Unread',
+            'target_role' => 'Owner',
+        ]);
+
         Cache::forget('cached_barangs');
         Cache::forget("barang_edit_{$barang->id}");
 
@@ -195,6 +203,13 @@ class TransaksiStokController extends Controller
         ]);
 
         $transaksi->update(['status_transaksi' => $request->status_transaksi]);
+
+        Notifikasi::create([
+            'title' => 'Status Diperbarui - ' . $transaksi->kode_transaksi,
+            'message' => 'Status Transaksi ' . $transaksi->kode_transaksi . ' telah diperbarui menjadi ' . $request->status_transaksi,
+            'status' => 'Unread',
+            'target_role' => 'Op-Gudang',
+        ]);
 
         return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui.');
     }

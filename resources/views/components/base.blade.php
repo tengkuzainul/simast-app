@@ -88,7 +88,7 @@
             });
         });
     </script>
-
+    @stack('script-notifications')
 </body>
 
 </html>

@@ -2,10 +2,13 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
-        <a href="{{ route('stok.form') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-            aria-label="Tambah Data">
-            <i class="fas fa-plus fa-sm text-white-50"></i> {{ __('Tambah Data') }}
-        </a>
+
+        @assignRole('Op-Gudang')
+            <a href="{{ route('stok.form') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                aria-label="Tambah Data">
+                <i class="fas fa-plus fa-sm text-white-50"></i> {{ __('Tambah Data') }}
+            </a>
+        @endassignRole
     </div>
 
     <!-- Data Table Card -->
@@ -119,38 +122,45 @@
                                 <td>
                                     <div class="d-flex flex-column" style="gap: 10px">
                                         <div class="d-flex justify-content-center align-items-center" style="gap: 5px;">
-                                            <a href="{{ route('stok.edit', $transaksi->id) }}"
-                                                class="btn btn-secondary btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="{{ route('stok.destroy', $transaksi->id) }}"
-                                                class="btn btn-danger btn-sm" data-confirm-delete="true">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
+                                            @assignRole('Op-Gudang')
+                                                <a href="{{ route('stok.edit', $transaksi->id) }}"
+                                                    class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endassignRole
+                                            @assignRole('Owner')
+                                                <a href="{{ route('stok.destroy', $transaksi->id) }}"
+                                                    class="btn btn-danger btn-sm" data-confirm-delete="true">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            @endassignRole
                                         </div>
-                                        <form action="{{ route('stok.status', $transaksi->id) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="hidden" name="status_transaksi" value=""
-                                                id="statusInput-{{ $transaksi->id }}">
 
-                                            <div class="d-flex justify-content-center align-items-center"
-                                                style="gap: 5px;">
-                                                <button type="submit"
-                                                    onclick="document.getElementById('statusInput-{{ $transaksi->id }}').value='Disetujui'"
-                                                    class="text-success"
-                                                    style="background: none; border: none; display: inline-flex; align-items: center; gap: 5px">
-                                                    <i class="fas fa-check-circle"></i> Setujui
-                                                </button>
+                                        @assignRole('Owner')
+                                            <form action="{{ route('stok.status', $transaksi->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="status_transaksi" value=""
+                                                    id="statusInput-{{ $transaksi->id }}">
 
-                                                <button type="submit"
-                                                    onclick="document.getElementById('statusInput-{{ $transaksi->id }}').value='Menunggu'"
-                                                    class="text-danger"
-                                                    style="background: none; border: none; display: inline-flex; align-items: center; gap: 5px">
-                                                    <i class="fas fa-times-circle"></i> Kembalikan
-                                                </button>
-                                            </div>
-                                        </form>
+                                                <div class="d-flex justify-content-center align-items-center"
+                                                    style="gap: 5px;">
+                                                    <button type="submit"
+                                                        onclick="document.getElementById('statusInput-{{ $transaksi->id }}').value='Disetujui'"
+                                                        class="text-success"
+                                                        style="background: none; border: none; display: inline-flex; align-items: center; gap: 5px">
+                                                        <i class="fas fa-check-circle"></i> Setujui
+                                                    </button>
+
+                                                    <button type="submit"
+                                                        onclick="document.getElementById('statusInput-{{ $transaksi->id }}').value='Menunggu'"
+                                                        class="text-danger"
+                                                        style="background: none; border: none; display: inline-flex; align-items: center; gap: 5px">
+                                                        <i class="fas fa-times-circle"></i> Kembalikan
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        @endassignRole
                                     </div>
                                 </td>
                             </tr>

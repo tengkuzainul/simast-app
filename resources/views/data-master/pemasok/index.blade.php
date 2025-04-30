@@ -115,10 +115,13 @@
                                             data-target="#editModal-{{ $data->id }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('pemasok.destroy', $data->id) }}"
-                                            class="btn btn-danger btn-sm" data-confirm-delete="true">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
+
+                                        @assignRole('Owner')
+                                            <a href="{{ route('pemasok.destroy', $data->id) }}"
+                                                class="btn btn-danger btn-sm" data-confirm-delete="true">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        @endassignRole
                                     </div>
                                 </td>
                             </tr>

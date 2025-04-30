@@ -28,11 +28,13 @@
     <!-- Heading -->
     <div class="sidebar-heading">Menu</div>
 
-    <li class="nav-item {{ request()->is('user*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('user.index') }}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Data Pengguna</span></a>
-    </li>
+    @assignRole('Owner')
+        <li class="nav-item {{ request()->is('user*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('user.index') }}">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Data Pengguna</span></a>
+        </li>
+    @endassignRole
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item {{ request()->is('kategori*') ? 'active' : '' }}">
@@ -71,8 +73,12 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header {{ request()->is('manajemen-stok*') ? 'text-primary' : '' }}">
                     Data &rarr;</h6>
-                <a class="collapse-item {{ request()->routeIs('stok.form') ? 'active' : '' }}"
-                    href="{{ route('stok.form') }}">Transaksi Stok</a>
+
+                @assignRole('Op-Gudang')
+                    <a class="collapse-item {{ request()->routeIs('stok.form') ? 'active' : '' }}"
+                        href="{{ route('stok.form') }}">Transaksi Stok</a>
+                @endassignRole
+
                 <a class="collapse-item {{ request()->routeIs('stok.index') ? 'active' : '' }}"
                     href="{{ route('stok.index') }}">Data Transaksi</a>
             </div>
