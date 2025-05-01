@@ -99,8 +99,9 @@
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column">
-                                        <span class="font-weight-bold">{{ $transaksi->pemasok->kode_pemasok }}</span>
-                                        <span>{{ $transaksi->pemasok->nama_pemasok }}</span>
+                                        <span
+                                            class="font-weight-bold">{{ $transaksi->pemasok->kode_pemasok ?? '-' }}</span>
+                                        <span>{{ $transaksi->pemasok->nama_pemasok ?? '-' }}</span>
                                     </div>
                                 </td>
                                 <td>{{ $transaksi->user->name }}</td>
