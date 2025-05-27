@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -62,6 +63,7 @@ class LoginController extends Controller
         if ($user->role == 'Owner' || $user->role == 'Op-Gudang') {
             $user->last_login_at = now();
             $user->save();
+            Session::flash('confeti', true);
             return redirect()->intended($this->redirectTo)->with('success', 'Login Berhasil');
         } else {
             Auth::logout();

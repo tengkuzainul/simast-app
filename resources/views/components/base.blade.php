@@ -84,6 +84,7 @@
         });
     </script>
     @stack('script-notifications')
+    @stack('script-confeti')
 </body>
 
 </html>
