@@ -73,7 +73,7 @@ class LoginController extends Controller
 
     protected function loggedOut(Request $request)
     {
-        Alert::success('Logout Berhasil', 'Anda telah berhasil logout dari sistem');
+        Alert::success('Logout Berhasil', 'Terimkasih, Sampai jumpa kembali!');
         return redirect('/login');
     }
 }
