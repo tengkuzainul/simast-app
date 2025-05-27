@@ -1,12 +1,13 @@
-<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar"
+    style="background-image: linear-gradient(135deg, #FF8343 0%, #EB5B00 100%);">
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
         <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-store"></i>
+            <i class="fas fa-boxes"></i>
         </div>
         <div class="sidebar-brand-text mx-3">
             <span class="flex flex-column gap-0">
-                <span class="mb-0">SiMast - App</span>
+                <span class="mb-0">ManageStok</span>
                 <span style="font-size: 7px">Rizki Ananda Store</span>
             </span>
         </div>

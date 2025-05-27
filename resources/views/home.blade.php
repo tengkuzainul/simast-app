@@ -2,9 +2,31 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate
-            Report</a>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-outline-dark shadow-sm"
+            onclick="event.preventDefault(); runConfetti();">
+            <i class="fas fa-smile fa-sm"></i> Hallo, {{ Auth::user()->name }}
+        </a>
+
+        <script>
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            function runConfetti() {
+                if (typeof confetti === "function") {
+                    confetti({
+                        angle: randomInRange(55, 125),
+                        spread: randomInRange(50, 70),
+                        particleCount: randomInRange(50, 100),
+                        origin: {
+                            y: 0.6
+                        }
+                    });
+                } else {
+                    alert('Confetti library is not loaded.');
+                }
+            }
+        </script>
     </div>
 
     <!-- Content Row -->

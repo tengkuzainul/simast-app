@@ -1,7 +1,7 @@
 <li class="nav-item dropdown no-arrow mx-1">
-    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+    <a class="nav-link dropdown-toggle text-white" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-bell fa-fw"></i>
+        <i class="fas fa-bell fa-fw text-white"></i>
         <!-- Counter - Alerts -->
         <span id="notif-count" class="badge badge-danger badge-counter">{{ $notifs->count() }}</span>
     </a>
@@ -9,7 +9,7 @@
     <!-- Dropdown - Alerts -->
     <div id="notif-list" class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
         aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">Notifikasi</h6>
+        <h6 class="dropdown-header bg-dark">Notifikasi</h6>
         <div id="notif-items">
             @forelse ($notifs as $data)
                 <a class="dropdown-item d-flex align-items-center" href="#"

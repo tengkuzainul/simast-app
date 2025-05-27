@@ -1,5 +1,6 @@
 <x-base :title="__('Login')">
-    <div class="bg-gradient-secondary">
+    <div class="bg-gradient-dark"
+        style="background-image: url('https://i.pinimg.com/736x/09/e5/42/09e54216f48b01f42a96d4e5b945146e.jpg'); background-size: cover; background-position: center; backdrop-filter: blur(5px); background-color: rgba(0, 0, 0, 0.5); background-blend-mode: darken;">
         <div class="container">
 
             <!-- Outer Row -->
@@ -12,7 +13,7 @@
                             <!-- Nested Row within Card Body -->
                             <div class="row">
                                 <div class="col-lg-6 d-none d-lg-block bg-login-image"
-                                    style="background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20210903/pngtree-clothing-store-casual-fashion-mens-photography-photos-with-pictures-image_796891.jpg'); background-size: cover; background-position: center; backdrop-filter: blur(5px); background-color: rgba(0, 0, 0, 0.5); background-blend-mode: darken;">
+                                    style="background-image: url('https://i.pinimg.com/736x/f0/47/02/f0470285f3f6b4bc6721e2f7611e3ee7.jpg'); background-position: center top; background-size: cover;">
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="p-5">
