@@ -37,8 +37,8 @@ class LaporanController extends Controller
             'tglAwal' => 'required|date',
             'tglAkhir' => 'required|date|after_or_equal:tglAwal',
             'jenisTransaksi' => 'required|in:masuk,keluar',
-            'barang' => 'nullable|exists:tb_barangs,id',
-            'pemasok' => 'nullable|exists:tb_pemasoks,id',
+            'barang' => 'nullable|exists:tb_barang,id',
+            'pemasok' => 'nullable|exists:tb_pemasok,id',
         ]);
 
         $endDate = Carbon::parse($request->tglAkhir)->endOfDay();
@@ -63,7 +63,7 @@ class LaporanController extends Controller
             'tglAkhir' => $request->tglAkhir,
             'jenisTransaksi' => $request->jenisTransaksi,
             'namaToko' => 'Rizki Ananda Fashion Store',
-            'tanggalCetak' => Carbon::now()->locale('id')->translatedFormat('d F Y H:i'),
+            'tanggalCetak' => Carbon::now()->locale('id')->format('d F Y H:i'),
         ])->setPaper('a4', 'landscape')->setOptions([
             'isHtml5ParserEnabled' => true,
             'isPhpEnabled' => true,
