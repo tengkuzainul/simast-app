@@ -52,6 +52,15 @@ Route::put('/notifikasi/read/{id}', function ($id) {
     return response()->json(['success' => false], 403);
 })->middleware('auth');
 
+// Routes untuk Notifikasi Management
+Route::middleware('auth')->prefix('notifikasi')->group(function () {
+    Route::get('/', [App\Http\Controllers\NotifikasiController::class, 'index'])->name('notifikasi.index');
+    Route::get('/{notifikasi}', [App\Http\Controllers\NotifikasiController::class, 'show'])->name('notifikasi.show');
+    Route::put('/mark-all-read', [App\Http\Controllers\NotifikasiController::class, 'markAllAsRead'])->name('notifikasi.mark-all-read');
+    Route::put('/{notifikasi}/mark-read', [App\Http\Controllers\NotifikasiController::class, 'markAsRead'])->name('notifikasi.mark-read');
+    Route::delete('/{notifikasi}', [App\Http\Controllers\NotifikasiController::class, 'destroy'])->name('notifikasi.destroy');
+});
+
 Route::middleware(['auth'])->group(function () {
     /**
      * Route group role Owner
@@ -150,6 +159,12 @@ Route::middleware(['auth'])->group(function () {
          */
         Route::controller(TransaksiStokController::class)->prefix('manajemen-stok')->group(function () {
             Route::get('/form', 'formTransaksiStok')->name('stok.form');
+            Route::post('/pilih-jenis', 'pilihJenisTransaksi')->name('stok.pilih-jenis');
+            Route::post('/add-to-cart', 'addToCart')->name('stok.add-to-cart');
+            Route::delete('/remove-from-cart/{itemKey}', 'removeFromCart')->name('stok.remove-from-cart');
+            Route::delete('/clear-cart', 'clearCart')->name('stok.clear-cart');
+            Route::post('/process-transaction', 'processTransaction')->name('stok.process');
+            Route::get('/faktur', 'generateFaktur')->name('stok.faktur');
             Route::post('/submit-form', 'transactionCreate')->name('stok.submit');
             Route::get('/edit/{transaksi}', 'edit')->name('stok.edit');
             Route::put('/update/{transaksi}', 'update')->name('stok.update');

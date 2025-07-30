@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tb_stok_transaksi', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_transaksi', 50)->unique();
+            $table->string('kode_transaksi', 50);
             $table->foreignId('barang_id')->constrained('tb_barang')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('pemasok_id')->nullable()->constrained('tb_pemasok')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');

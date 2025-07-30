@@ -50,7 +50,7 @@ class TransaksiStokController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function formTransaksiStok()
+    public function formTransaksiStok(Request $request)
     {
         $breadcrumbs = [
             ['label' => 'Dashboard', 'url' => route('home')],
@@ -66,12 +66,167 @@ class TransaksiStokController extends Controller
             return Pemasok::select(['id', 'nama_pemasok'])->get();
         });
 
+        // Ambil data dari session untuk keranjang transaksi
+        $cartItems = session('transaction_cart', []);
+
+        // Ambil jenis transaksi dari query parameter
+        $jenisTransaksi = $request->query('jenis');
+
         return view('transaksi-stok.form-transaksi', [
             'breadcrumbs' => $breadcrumbs,
             'title' => 'Form Transaksi Stok',
             'kodeTransaksi' => $this->generateTransactionCode(),
             'barangs' => $barangs,
             'pemasoks' => $pemasoks,
+            'jenisTransaksi' => $jenisTransaksi,
+            'cartItems' => $cartItems,
+        ]);
+    }
+
+    /**
+     * Handle pilih jenis transaksi
+     */
+    public function pilihJenisTransaksi(Request $request)
+    {
+        $request->validate([
+            'jenisTransaksi' => 'required|string|in:masuk,keluar',
+        ]);
+
+        // Redirect kembali ke form dengan query parameter jenis transaksi
+        return redirect()->route('stok.form', ['jenis' => $request->jenisTransaksi]);
+    }
+
+    /**
+     * Tambah item ke keranjang transaksi (session)
+     */
+    public function addToCart(Request $request)
+    {
+        $request->validate([
+            'barang' => 'required|exists:tb_barang,id',
+            'pemasok' => 'nullable|exists:tb_pemasok,id',
+            'jumlahBarang' => 'required|numeric|min:1',
+        ]);
+
+        $jenisTransaksi = $request->query('jenis');
+
+        if (!in_array($jenisTransaksi, ['masuk', 'keluar'])) {
+            return redirect()->back()->withErrors(['error' => 'Jenis transaksi tidak valid']);
+        }
+
+        // Validasi pemasok untuk transaksi masuk
+        if ($jenisTransaksi === 'masuk' && !$request->pemasok) {
+            return redirect()->back()->withErrors(['pemasok' => 'Pemasok wajib dipilih untuk transaksi masuk']);
+        }
+
+        $barang = Barang::find($request->barang);
+        $pemasok = $request->pemasok ? Pemasok::find($request->pemasok) : null;
+
+        // Validasi stok untuk transaksi keluar
+        if ($jenisTransaksi === 'keluar' && $barang->stok_final < $request->jumlahBarang) {
+            return redirect()->back()->withErrors(['jumlahBarang' => 'Stok tidak mencukupi. Stok saat ini: ' . $barang->stok_final]);
+        }
+
+        // Ambil cart dari session
+        $cart = session('transaction_cart', []);
+
+        // Generate unique key untuk item
+        $itemKey = $barang->id . '_' . ($pemasok ? $pemasok->id : 'no_supplier');
+
+        // Jika item sudah ada, update jumlahnya
+        if (isset($cart[$itemKey])) {
+            $newQuantity = $cart[$itemKey]['jumlah'] + $request->jumlahBarang;
+
+            // Validasi stok total untuk transaksi keluar
+            if ($jenisTransaksi === 'keluar' && $barang->stok_final < $newQuantity) {
+                return redirect()->back()->withErrors(['jumlahBarang' => 'Total jumlah melebihi stok. Stok saat ini: ' . $barang->stok_final . ', sudah di keranjang: ' . $cart[$itemKey]['jumlah']]);
+            }
+
+            $cart[$itemKey]['jumlah'] = $newQuantity;
+        } else {
+            // Tambah item baru ke cart
+            $cart[$itemKey] = [
+                'barang_id' => $barang->id,
+                'barang_kode' => $barang->kode_barang,
+                'barang_nama' => $barang->nama_barang,
+                'barang_harga' => $barang->harga_jual ?? 0,
+                'pemasok_id' => $pemasok ? $pemasok->id : null,
+                'pemasok_nama' => $pemasok ? $pemasok->nama_pemasok : null,
+                'jumlah' => $request->jumlahBarang,
+                'jenis_transaksi' => $jenisTransaksi,
+            ];
+        }
+
+        // Simpan cart ke session
+        session(['transaction_cart' => $cart]);
+
+        return redirect()->back()->with('success', 'Barang berhasil ditambahkan ke keranjang');
+    }
+
+    /**
+     * Hapus item dari keranjang
+     */
+    public function removeFromCart($itemKey)
+    {
+        $cart = session('transaction_cart', []);
+
+        if (isset($cart[$itemKey])) {
+            unset($cart[$itemKey]);
+            session(['transaction_cart' => $cart]);
+            return redirect()->back()->with('success', 'Item berhasil dihapus dari keranjang');
+        }
+
+        return redirect()->back()->with('error', 'Item tidak ditemukan');
+    }
+
+    /**
+     * Bersihkan semua keranjang
+     */
+    public function clearCart()
+    {
+        session()->forget('transaction_cart');
+        return redirect()->back()->with('success', 'Keranjang berhasil dikosongkan');
+    }
+
+    /**
+     * Generate faktur berdasarkan pemasok
+     */
+    public function generateFaktur(Request $request)
+    {
+        $request->validate([
+            'pemasok_id' => 'required|exists:tb_pemasok,id'
+        ]);
+
+        $pemasok = Pemasok::findOrFail($request->pemasok_id);
+
+        // Ambil semua transaksi masuk dari pemasok ini, diurutkan berdasarkan kode transaksi
+        $transaksis = StokTransaksi::with(['barang', 'user'])
+            ->where('pemasok_id', $request->pemasok_id)
+            ->where('tipe_transaksi', 'masuk')
+            ->orderBy('kode_transaksi')
+            ->get();
+
+        if ($transaksis->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada transaksi masuk untuk pemasok ini');
+        }
+
+        // Calculate totals
+        $totalItems = $transaksis->count();
+        $totalQuantity = $transaksis->sum('jumlah');
+        $totalValue = $transaksis->sum(function ($transaksi) {
+            return $transaksi->jumlah * ($transaksi->barang->harga_beli ?? 0);
+        });
+
+        // Generate nomor faktur
+        $nomorFaktur = 'INV-' . strtoupper($pemasok->kode_pemasok ?? 'SUP') . '-' . date('Ymd') . '-' . str_pad($totalItems, 3, '0', STR_PAD_LEFT);
+
+        return view('transaksi-stok.faktur', [
+            'pemasok' => $pemasok,
+            'transaksis' => $transaksis,
+            'nomorFaktur' => $nomorFaktur,
+            'totalItems' => $totalItems,
+            'totalQuantity' => $totalQuantity,
+            'totalValue' => $totalValue,
+            'tanggalCetak' => now(),
         ]);
     }
 
@@ -98,40 +253,60 @@ class TransaksiStokController extends Controller
      */
     public function transactionCreate(Request $request)
     {
-        $request->validate([
-            'barang' => 'required|exists:tb_barang,id',
-            'jenisTransaksi' => 'required|string|in:masuk,keluar',
-            'pemasok' => 'nullable|exists:tb_pemasok,id',
-            'jumlahBarang' => 'required|numeric|min:1',
-        ]);
+        // Ambil cart dari session
+        $cart = session('transaction_cart', []);
 
-        StokTransaksi::create([
-            'kode_transaksi' => $this->generateTransactionCode(),
-            'barang_id' => $request->barang,
-            'pemasok_id' => $request->pemasok,
-            'user_id' => Auth::user()->id,
-            'tipe_transaksi' => $request->jenisTransaksi,
-            'jumlah' => $request->jumlahBarang,
-            'status_transaksi' => 'Menunggu',
-        ]);
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Keranjang transaksi kosong');
+        }
 
-        $barang = Barang::find($request->barang);
-        $currentStock = $barang->stok_final;
-        $incrementStock = $request->jenisTransaksi === 'masuk' ? $request->jumlahBarang : -$request->jumlahBarang;
-        $barang->stok_final = $currentStock + $incrementStock;
-        $barang->save();
+        $jenisTransaksi = null;
 
-        Notifikasi::create([
-            'title' => 'Transaksi ' . ucfirst($request->jenisTransaksi) . ' Baru',
-            'message' => 'Transaksi ' . $request->jenisTransaksi . ' untuk barang "' . $barang->nama_barang . '" telah dibuat.',
-            'status' => 'Unread',
-            'target_role' => 'Owner',
-        ]);
+        // Proses semua item dalam cart
+        foreach ($cart as $item) {
+            $jenisTransaksi = $item['jenis_transaksi']; // Ambil jenis transaksi dari item pertama
 
-        Cache::forget('cached_barangs');
-        Cache::forget("barang_edit_{$barang->id}");
+            StokTransaksi::create([
+                'kode_transaksi' => $this->generateTransactionCode(),
+                'barang_id' => $item['barang_id'],
+                'pemasok_id' => $item['pemasok_id'],
+                'user_id' => Auth::user()->id,
+                'tipe_transaksi' => $item['jenis_transaksi'],
+                'jumlah' => $item['jumlah'],
+                'status_transaksi' => 'Menunggu',
+            ]);
 
-        return redirect()->back()->with('success', 'Transaksi berhasil ditambahkan.');
+            // Update stok barang
+            $barang = Barang::find($item['barang_id']);
+            $currentStock = $barang->stok_final;
+            $incrementStock = $item['jenis_transaksi'] === 'masuk' ? $item['jumlah'] : -$item['jumlah'];
+            $barang->stok_final = $currentStock + $incrementStock;
+            $barang->save();
+
+            // Buat notifikasi
+            Notifikasi::create([
+                'title' => 'Transaksi ' . ucfirst($item['jenis_transaksi']) . ' Baru',
+                'message' => 'Transaksi ' . $item['jenis_transaksi'] . ' untuk barang "' . $item['barang_nama'] . '" telah dibuat.',
+                'status' => 'Unread',
+                'target_role' => 'Owner',
+            ]);
+
+            Cache::forget('cached_barangs');
+            Cache::forget("barang_edit_{$barang->id}");
+        }
+
+        // Hapus cart dari session setelah berhasil
+        session()->forget('transaction_cart');
+
+        return redirect()->route('stok.index')->with('success', 'Semua transaksi berhasil ditambahkan.');
+    }
+
+    /**
+     * Proses simpan semua transaksi dalam keranjang
+     */
+    public function processTransaction(Request $request)
+    {
+        return $this->transactionCreate($request);
     }
 
     public function edit(StokTransaksi $transaksi)
@@ -163,6 +338,7 @@ class TransaksiStokController extends Controller
 
     public function update(Request $request, StokTransaksi $transaksi)
     {
+        // Validasi dasar
         $request->validate([
             'barang' => 'required|exists:tb_barang,id',
             'jenisTransaksi' => 'required|string|in:masuk,keluar',
@@ -170,25 +346,57 @@ class TransaksiStokController extends Controller
             'jumlahBarang' => 'required|numeric|min:1',
         ]);
 
+        // Validasi pemasok untuk transaksi masuk
+        if ($request->jenisTransaksi === 'masuk' && !$request->pemasok) {
+            return redirect()->back()->withErrors(['pemasok' => 'Pemasok wajib dipilih untuk transaksi masuk']);
+        }
+
+        // Validasi stok untuk transaksi keluar (jika berbeda barang atau jumlah bertambah)
+        $newBarang = Barang::find($request->barang);
+        if ($request->jenisTransaksi === 'keluar') {
+            // Hitung stok yang akan tersedia setelah rollback transaksi lama
+            $currentStock = $newBarang->stok_final;
+
+            // Jika barang sama, tambahkan kembali stok lama
+            if ($transaksi->barang_id == $request->barang && $transaksi->tipe_transaksi === 'keluar') {
+                $currentStock += $transaksi->jumlah;
+            }
+
+            // Cek apakah stok mencukupi untuk jumlah baru
+            if ($currentStock < $request->jumlahBarang) {
+                return redirect()->back()->withErrors(['jumlahBarang' => 'Stok tidak mencukupi. Stok tersedia: ' . $currentStock]);
+            }
+        }
+
+        // Rollback stok barang lama
         $oldBarang = Barang::find($transaksi->barang_id);
         $stokAdjustmentLama = $transaksi->tipe_transaksi === 'masuk' ? -$transaksi->jumlah : $transaksi->jumlah;
         $oldBarang->stok_final += $stokAdjustmentLama;
         $oldBarang->save();
         Cache::forget("barang_edit_{$oldBarang->id}");
 
+        // Update transaksi
         $transaksi->update([
             'barang_id' => $request->barang,
             'pemasok_id' => $request->pemasok,
             'user_id' => Auth::id(),
             'tipe_transaksi' => $request->jenisTransaksi,
             'jumlah' => $request->jumlahBarang,
-            'status_transaksi' => 'Menunggu',
+            'status_transaksi' => 'Menunggu', // Reset status ke menunggu setelah edit
         ]);
 
-        $newBarang = Barang::find($request->barang);
+        // Apply stok barang baru
         $stokAdjustmentBaru = $request->jenisTransaksi === 'masuk' ? $request->jumlahBarang : -$request->jumlahBarang;
         $newBarang->stok_final += $stokAdjustmentBaru;
         $newBarang->save();
+
+        // Buat notifikasi
+        Notifikasi::create([
+            'title' => 'Transaksi ' . ucfirst($request->jenisTransaksi) . ' Diperbarui',
+            'message' => 'Transaksi ' . $transaksi->kode_transaksi . ' untuk barang "' . $newBarang->nama_barang . '" telah diperbarui.',
+            'status' => 'Unread',
+            'target_role' => 'Owner',
+        ]);
 
         Cache::forget('cached_barangs');
         Cache::forget("barang_edit_{$newBarang->id}");

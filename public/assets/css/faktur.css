@@ -1,0 +1,115 @@
+/* Faktur Print Styles */
+@media print {
+          .no-print {
+                    display: none !important;
+          }
+
+          body {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                    font-size: 12px;
+          }
+
+          .invoice-header {
+                    background: #667eea !important;
+                    color: white !important;
+          }
+
+          .invoice-summary {
+                    background: #1cc88a !important;
+                    color: white !important;
+          }
+
+          .page-break {
+                    page-break-before: always;
+          }
+
+          .signature-section {
+                    margin-top: 30px;
+          }
+
+          .table-invoice {
+                    font-size: 11px;
+          }
+
+          .container {
+                    max-width: none;
+                    margin: 0;
+                    padding: 0;
+          }
+
+          .print-btn {
+                    display: none !important;
+          }
+}
+
+/* Screen Styles */
+@media screen {
+          .faktur-container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+          }
+
+          .table-invoice {
+                    font-size: 13px;
+          }
+
+          .print-btn {
+                    animation: pulse 2s infinite;
+          }
+
+          @keyframes pulse {
+                    0% {
+                              transform: scale(1);
+                    }
+
+                    50% {
+                              transform: scale(1.05);
+                    }
+
+                    100% {
+                              transform: scale(1);
+                    }
+          }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+          .invoice-header {
+                    padding: 20px;
+          }
+
+          .invoice-header .row {
+                    text-align: center;
+          }
+
+          .company-info {
+                    margin-bottom: 20px;
+          }
+
+          .invoice-details {
+                    font-size: 12px;
+          }
+
+          .table-invoice {
+                    font-size: 10px;
+          }
+
+          .signature-section {
+                    flex-direction: column;
+                    gap: 30px;
+          }
+
+          .signature-box {
+                    width: 100%;
+                    text-align: center;
+          }
+
+          .print-btn {
+                    position: relative;
+                    top: auto;
+                    right: auto;
+                    margin: 20px auto;
+                    display: block;
+          }
+}

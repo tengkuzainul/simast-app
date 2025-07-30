@@ -13,7 +13,7 @@
         <div id="notif-items">
             @forelse ($notifs as $data)
                 <a class="dropdown-item d-flex align-items-center" href="#"
-                    onclick="markAsReadThenRedirect({{ $data->id }}, '/manajemen-stok/data')">
+                    onclick="markAsReadThenRedirect({{ $data->id }}, '{{ route('notifikasi.show', $data->id) }}')">
                     <div class="mr-3">
                         <div class="icon-circle bg-primary">
                             <i class="fas fa-bell text-white"></i>
@@ -32,6 +32,10 @@
                 <p class="dropdown-item d-flex align-items-center justify-content-center">Tidak Ada Notifikasi.</p>
             @endforelse
         </div>
+        <a class="dropdown-item text-center small text-gray-500" href="{{ route('notifikasi.index') }}">
+            <i class="fas fa-list mr-1"></i>
+            Lihat Semua Notifikasi
+        </a>
     </div>
 
     @push('script-notifications')
@@ -59,7 +63,7 @@
                             const time = new Date(data.created_at).toLocaleString('id-ID');
                             const item = `
                             <a class="dropdown-item d-flex align-items-center" href="#"
-                                onclick="markAsReadThenRedirect(${data.id}, '/manajemen-stok/data')">
+                                onclick="markAsReadThenRedirect(${data.id}, '/notifikasi/${data.id}')">
                                 <div class="mr-3">
                                     <div class="icon-circle bg-primary">
                                         <i class="fas fa-bell text-white"></i>
@@ -76,6 +80,14 @@
                             </a>`;
                             notifList.insertAdjacentHTML('beforeend', item);
                         });
+
+                        // Tambahkan link "Lihat Semua" di akhir
+                        notifList.insertAdjacentHTML('beforeend', `
+                            <a class="dropdown-item text-center small text-gray-500" href="/notifikasi">
+                                <i class="fas fa-list mr-1"></i>
+                                Lihat Semua Notifikasi
+                            </a>
+                        `);
                     }
 
                     prevCount = notifs.length;
@@ -103,7 +115,7 @@
 
             // Jalankan awal dan polling tiap 10 detik
             fetchNotifikasi();
-            setInterval(fetchNotifikasi, 10000);
+            setInterval(fetchNotifikasi, 20000);
         </script>
     @endpush
 </li>
